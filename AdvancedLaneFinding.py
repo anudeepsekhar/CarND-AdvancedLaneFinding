@@ -203,7 +203,7 @@ def sliding_window_search(binary_warped):
 
     visualization_data = [rectangle_data, histogram, binary_warped]
 
-    return left_fit, right_fit, left_lane_inds, right_lane_inds, visualization_data
+    return leftx, rightx, lefty, righty, left_fit, right_fit, visualization_data
 
 
 def showSWsearch(left_fit, right_fit, left_lane_inds, right_lane_inds, visualization_data):
@@ -369,6 +369,60 @@ def draw_data(original_img, curv_rad, center_dist):
     cv2.putText(new_img, text, (40, 120), font, 1.5, (200, 255, 155), 2, cv2.LINE_AA)
     return new_img
 
+
+class Line():
+    def __init__(self):
+        # was the line detected in the last iteration?
+        self.detected = False
+        # x values of the last n fits of the line
+        self.recent_xfitted = []
+        # average x values of the fitted line over the last n iterations
+        self.bestx = []
+        # polynomial coefficients averaged over the last n iterations
+        self.best_fit = None
+        # polynomial coefficients for the most recent fit
+        self.current_fit = [np.array([False])]
+        # radius of curvature of the line in some units
+        self.radius_of_curvature = None
+        # distance in meters of vehicle center from the line
+        self.line_base_pos = None
+        # difference in fit coefficients between last and new fits
+        self.diffs = np.array([0, 0, 0], dtype='float')
+        # x values for detected line pixels
+        self.allx = None
+        # y values for detected line pixels
+        self.ally = None
+
+    def addFit(self, fit):
+        self.current_fit = fit
+        if self.current_fit is not None:
+            # print self.best_fit
+            if self.best_fit is not None:
+                # Compare with Best Fit
+                self. diffs = abs(self.current_fit - self.best_fit)
+            if((self.diffs[0] > 0.001 - self.diffs[1] > 1 - self.diffs[2] > 100).any()):
+                # discard current
+                self.detected = False
+            else:
+                self.detected = True
+                self.recent_xfitted.append(self.current_fit)
+                if len(self.recent_xfitted) > 8:
+                    self.recent_xfitted = self.recent_xfitted[len(self.recent_xfitted) - 8:]
+
+                self.best_fit = np.average(self.recent_xfitted, axis=0)
+                self.bestx.append(self.best_fit)
+                # print self.best_fit
+        else:
+            self.detected = False
+            if len(self.recent_xfitted) > 0:
+                self.recent_xfitted = self.recent_xfitted[:len(self.recent_xfitted) - 1]
+            self.best_fit = np.average(self.recent_xfitted, axis=0)
+            self.bestx.append(self.best_fit)
+
+
+
+
+
 def findLanes(image):
     img_size = (int(image.shape[1]), int(image.shape[0]))
     # cv2.imshow("orginal", image)
@@ -384,21 +438,43 @@ def findLanes(image):
     image = selectROI(image, roi_pts)
     warped = warp(image)
     # cv2.imshow("Warped", warped)
-    left_fit, right_fit, left_lane_inds, right_lane_inds, visualization_data = sliding_window_search(
-        warped)
-    # showSWsearch(left_fit, right_fit, left_lane_inds,
-                 # right_lane_inds, visualization_data)
-    leftx, rightx, lefty, righty, left_fit, right_fit, visualization_data = swNeighbourSearch(warped, left_fit, right_fit)
-    # showNeighbourSearch(leftx, rightx, lefty, righty, left_fit, right_fit, visualization_data)
+    if not Left.detected or not Right.detected:
+        leftx, rightx, lefty, righty, left_fit, right_fit, visualization_data = sliding_window_search(warped)
+    else:
+        leftx, rightx, lefty, righty, left_fit, right_fit, visualization_data = swNeighbourSearch(warped, Left.best_fit, Right.best_fit)
+
+    if left_fit is not None and right_fit is not None:
+        # Calculate the intercepts
+        h = warped.shape[0]
+        l_fit_x_int = left_fit[0]*h**2 + left_fit[1]*h + left_fit[2]
+        r_fit_x_int = right_fit[0]*h**2 + right_fit[1]*h + right_fit[2]
+        int_diff = abs(l_fit_x_int - r_fit_x_int)
+        # print int_diff
+        diff = abs(int_diff - 500)
+        print diff
+
+        if not ((diff) > 50):
+            # Do Something
+            Left.addFit(left_fit)
+            Right.addFit(right_fit)
+        else:
+            Left.best_fit = Left.bestx[-3]
+            Right.best_fit = Right.bestx[-3]
+
+
 
     left_curverad, right_curverad, center_dist = findCurvature(warped, leftx, rightx, lefty, righty)
-
-    result = drawLane(warped, left_fit, right_fit, img_size, undist)
+    result = drawLane(warped, Left.best_fit, Right.best_fit, img_size, undist)
     result = draw_data(result, left_curverad, center_dist)
+    # print Right.current_fit
+    # print Right.detected
+    # print Right.recent_xfitted
 
     return result
 
 
+Right = Line()
+Left = Line()
 cap = cv2.VideoCapture('project_video.mp4')
 while(cap.isOpened()):
     ret, frame = cap.read()
