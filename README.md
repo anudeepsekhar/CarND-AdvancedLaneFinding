@@ -23,7 +23,7 @@
 
 ## Step 1: Camera Calibration
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image. Thus, objp is just a replicated array of coordinates, and objpoints will be appended with a copy of it every time I successfully detect all chessboard corners in a test image. imgpoints will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection. I then used the output objpoints and imgpoints to compute the camera calibration and distortion coefficients using the cv2.calibrateCamera() function. I applied this distortion correction to the test image using the cv2.undistort() function and obtained this result:
-![Callibration](/Advanced+Lane+Finding+/output_12_1.jpg)
+![Callibration](Advanced+Lane+Finding+/output_12_1.jpg)
 
 ## Step 2: Distrortion Correction
 Refer Jupyter Notebook for the Code.
@@ -62,7 +62,7 @@ Example:
 #### Selecting the S-Channel of HLS
 
 We Can Observe that the line are most clear in S-channel and hence i applied thresholding to isolate the S-channel ans obtain a binary image of the same.
-![HLS2](/Advanced+Lane+Finding+/output_28_1.jpg)
+![HLS2](Advanced+Lane+Finding+/output_28_1.jpg)
 
 ### LAB Colorspace
 The Lab color space describes mathematically all perceivable colors in the three dimensions L for lightness and a and b for the color components green–red and blue–yellow
