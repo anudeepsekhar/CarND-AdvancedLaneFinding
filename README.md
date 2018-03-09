@@ -158,7 +158,7 @@ Finally, the distance from center was converted from pixels to meters by multipl
 Next I used the following code to calculate the radius of curvature for each lane line in meters.
 The final radius of curvature was taken by average the left and right curve radiuses.
 
-## Step 8: Visual Display of the Lane Boundaries and Numerical Estimation
+## Step 8: Visual Display of the Lane Boundaries
 
 I used the following functions to help me visualize the detected data (i.e, the detected drivable region between the lanes and the measure of curvature of the lane) back on to the original image/frame.
 
@@ -166,7 +166,7 @@ Refer jupyter notebook for code.
 
 Example Output:
 
-
+![BEV](/Advanced+Lane+Finding+/output_75_6_1.jpg)
 
 ## Video Processing Pipeline
 
@@ -196,4 +196,9 @@ this function has the following characteristics:
     - If not the detected lanes are discarded an no lane is detected
 - Once lanes are detected and pass through the sanity checks calculate the radius of curvature and position of the vehicle
 - Warp the detected lane boundaries back onto the original image and output visual display of the lane boundaries and     numerical estimation of lane curvature and vehicle position.
+
+## Possible Limitations:
+The video pipeline developed in this project did a fairly robust job of detecting the lane lines in the test video provided for the project, which shows a road in basically ideal conditions, with fairly distinct lane lines, and on a clear day, although it did lose the lane lines slightly momentarily when there was heavy shadow over the road from a tree.
+
+What I have learned from this project is that it is relatively easy to finetune a software pipeline to work well for consistent road and weather conditions, but what is challenging is finding a single combination which produces the same quality result in any condition. I have not yet tested the pipeline on additional video streams which could challenge the pipeline with varying lighting and weather conditions, road quality, faded lane lines, and different types of driving like lane shifts, passing, and exiting a highway. For further research I plan to record some additional video streams of my own driving in various conditions and continue to refine my pipeline to work in more varied environments.
 
