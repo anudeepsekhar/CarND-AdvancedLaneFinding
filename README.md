@@ -158,7 +158,15 @@ Finally, the distance from center was converted from pixels to meters by multipl
 Next I used the following code to calculate the radius of curvature for each lane line in meters.
 The final radius of curvature was taken by average the left and right curve radiuses.
 
-## Step 8: 
+## Step 8: Visual Display of the Lane Boundaries and Numerical Estimation
+
+I used the following functions to help me visualize the detected data (i.e, the detected drivable region between the lanes and the measure of curvature of the lane) back on to the original image/frame.
+
+Refer jupyter notebook for code.
+
+Example Output:
+
+
 
 ## Video Processing Pipeline
 
