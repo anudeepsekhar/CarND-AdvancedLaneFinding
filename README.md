@@ -13,7 +13,7 @@
      8. Warp the detected lane boundaries back onto the original image and output visual display of the lane boundaries and     numerical estimation of lane curvature and vehicle position.
      
      
-[![Video alpha](/Advanced+Lane+Finding+/output_75_6_1.jpg)](/output_videos/project_video.mp4)
+[![Video alpha](Advanced+Lane+Finding+/output_75_6_1.jpg)](output_videos/project_video.mp4)
      
 ## Required Libraries:
 - Numpy
@@ -29,7 +29,7 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 Refer Jupyter Notebook for the Code.
 
 An example of distortion correction:
-![Distortion0](/Advanced+Lane+Finding+/output_16_0.jpg)
+![Distortion0](Advanced+Lane+Finding+/output_16_0.jpg)
 
 ## Step 3: Pre-processing the image
 Our aim is to find the lanes from the undistorted image.
@@ -56,8 +56,8 @@ I used the  `cv2.cvtColor(image,cv2.COLOR_RGB2LAB)` function to convert the undi
 
 Example:
 
-![HLS](/Advanced+Lane+Finding+/output_26_1.jpg)
-![HLS1](/Advanced+Lane+Finding+/output_26_2.jpg)
+![HLS](Advanced+Lane+Finding+/output_26_1.jpg)
+![HLS1](Advanced+Lane+Finding+/output_26_2.jpg)
 
 #### Selecting the S-Channel of HLS
 
@@ -73,31 +73,31 @@ I used the  `cv2.cvtColor(image,cv2.COLOR_RGB2LAB)`  to convert the undistorted 
 
 Example:
 
-![LAB](/Advanced+Lane+Finding+/output_32_1.jpg)
-![LAB1](/Advanced+Lane+Finding+/output_32_2.jpg)
+![LAB](Advanced+Lane+Finding+/output_32_1.jpg)
+![LAB1](Advanced+Lane+Finding+/output_32_2.jpg)
 
 #### Selecting the B-Channel of LAB
 We Can Observe that the line are most clear in L-channel and hence i applied thresholding to isolate the L-channel ans obtain a binary image of the same
 
-![LAB1](/Advanced+Lane+Finding+/output_34_1.jpg)
+![LAB1](Advanced+Lane+Finding+/output_34_1.jpg)
 
 #### Combining S-Channel and B-Channel Thresholds
 Now I combined the S-channel binary and B-channel Binary images to obtain a combined Thresholdinng.
 
-![LAB1](/Advanced+Lane+Finding+/output_36_1.jpg)
+![LAB1](Advanced+Lane+Finding+/output_36_1.jpg)
 
 ### Sobel Filtering
 The Sobel operator performs a 2-D spatial gradient measurement on an image and so emphasizes regions of high spatial frequency that correspond to edges. Typically it is used to find the approximate absolute gradient magnitude at each point in an input grayscale image.
 
 I applied Sobel Filter in X-direction and Y-direction and the combines them to get the Absolute.
 
-![Sobel](/Advanced+Lane+Finding+/output_44_1.jpg)
+![Sobel](Advanced+Lane+Finding+/output_44_1.jpg)
 
 ### Combining Color threshold with Sobel threshold
 Now I combine the sobel thresholding and the HLS and LAB thresholding into a pre-processing pipeline. I chose to create this combined binary threshold based on the three above mentioned binary thresholds, to create one combination thresholded image which does a great job of highlighting almost all of the white and yellow lane lines.
 
 
-![Sobel](/Advanced+Lane+Finding+/output_46_1.jpg)
+![Sobel](Advanced+Lane+Finding+/output_46_1.jpg)
 
 
 ## Step 4: Region of Interest
@@ -109,7 +109,7 @@ The following steps help us to select the ROI:
  - Defining ROI
  - Applying ROI mask
 
-![ROI](/Advanced+Lane+Finding+/output_55_1.jpg)
+![ROI](Advanced+Lane+Finding+/output_55_1.jpg)
 
 ## Step 5: Perspective Transform
 
@@ -124,7 +124,7 @@ Source|Destination
 [730, 450]|[950, 10] 
 [1160, 700]|[950, 720]
 
-![BEV](/Advanced+Lane+Finding+/output_59_5.jpg)
+![BEV](Advanced+Lane+Finding+/output_59_5.jpg)
 
 ## Step5: Finding Lanes
 
@@ -141,9 +141,9 @@ The **Sliding Window Search** and **Neighbouring Search** help us to do the abov
 Exmaple Outputs
 
 
-![BEV](/Advanced+Lane+Finding+/output_64_1.jpg)
+![BEV](Advanced+Lane+Finding+/output_64_1.jpg)
 
-![BEV](/Advanced+Lane+Finding+/output_68_1.jpg)
+![BEV](Advanced+Lane+Finding+/output_68_1.jpg)
 
 **Note: Step 6 is discussed in the Video Processing Pipeline**
 
@@ -169,7 +169,7 @@ Refer jupyter notebook for code.
 
 Example Output:
 
-![BEV](/Advanced+Lane+Finding+/output_75_6_1.jpg)
+![BEV](Advanced+Lane+Finding+/output_75_6_1.jpg)
 
 ## Video Processing Pipeline
 
